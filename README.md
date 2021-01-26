@@ -8,11 +8,11 @@ The official implementation of Generative Random Walk Deviation Loss for Improve
 
 If you find this code is useful, please cite:
 
-`
+```
 @article{grawd,
   title={Generative Random Walk Deviation Loss for Improved Unseen Learning Representation},
   author={Divyansh, Jha and Kai, Yi and Ivan Skorokhodov, Ivan and Elhoseiny, Mohamed},
   journal={CVPR 2021 under review},
   year={2021}
 }
-'
+'''
