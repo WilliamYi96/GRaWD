@@ -27,7 +27,7 @@ Here we provide the potential best hyper-parameters that can reproduce our repor
 ## Reference
 - Yizhe Zhu, Mohamed Elhoseiny, Bingchen Liu, Xi Peng and Ahmed Elgammal "A Generative Adversarial Approach for Zero-Shot Learning from Noisy Texts", CVPR, 2018          
 - Mohamed Elhoseiny, Mohamed Elfeki, Creativity Inspired Zero Shot Learning, Thirty-sixth International Conference on Computer Vision (ICCV), 2019              
-
+- Elhoseiny, Mohamed, Kai Yi, and Mohamed Elfeki. "CIZSL++: Creativity Inspired Generative Zero-Shot Learning." arXiv preprint arXiv:2101.00173 (2021).       
 If you find this code is useful, please cite:
 
 ```
