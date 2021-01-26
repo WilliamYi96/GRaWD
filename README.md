@@ -13,6 +13,7 @@ Please put the uncompressed data to the folder "data".
 ## Training and Testing
 We provide integrated code for training and testing. 
 
+### Training on text-based datasets
 ```
 cd 'your main folder'
 
@@ -21,6 +22,17 @@ python train.py --dataset CUB --splitmode hard --exp_name 'CUB_hard_Rep' --rw_co
 python train.py --dataset NAB --splitmode easy --exp_name 'NAB_easy_Rep' --rw_config_path ./configs/NAB_easy_Best_HPs.yml
 python train.py --dataset NAB --splitmode hard --exp_name 'NAB_hard_Rep' --rw_config_path ./configs/NAB_hard_Best_HPs.yml
 ```
+
+### Training on attribute-based datasets
+```
+cd 'your main folder'
+
+python train.py --dataset CUB --splitmode easy --exp_name 'CUB_easy_Rep' --rw_config_path ./configs/CUB_easy_Best_HPs.yml
+python train.py --dataset CUB --splitmode hard --exp_name 'CUB_hard_Rep' --rw_config_path ./configs/CUB_hard_Best_HPs.yml
+python train.py --dataset NAB --splitmode easy --exp_name 'NAB_easy_Rep' --rw_config_path ./configs/NAB_easy_Best_HPs.yml
+python train.py --dataset NAB --splitmode hard --exp_name 'NAB_hard_Rep' --rw_config_path ./configs/NAB_hard_Best_HPs.yml
+```
+
 
 Here we provide the potential best hyper-parameters that can reproduce our reported results. You can refer to the logs under main folder for the training details. For each trial, the final performance may vary a little bit. Following standard setting, we report the best performance after k-trials. 
 
