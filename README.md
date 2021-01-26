@@ -15,4 +15,3 @@ If you find this code is useful, please cite:
   journal={CVPR 2021 under review},
   year={2021}
 }
-'''
