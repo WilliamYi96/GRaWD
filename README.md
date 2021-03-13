@@ -1,5 +1,5 @@
 # GRaWD
-The official implementation of Generative Random Walk Deviation Loss for Improved Unseen Learning Representation. CVPR 2021 under review.
+The official implementation of Generative Random Walk Deviation Loss for Improved Unseen Learning Representation. ICCV 2021 under review.
 
 # Requirements
 ## Packages
