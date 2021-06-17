@@ -12,7 +12,7 @@ import argparse
 
 def read_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser('Running LLL trainer')
-    parser.add_argument('-n', '--num_runs', default=5, type=int, help='Number of runs for each experimental setup')
+    parser.add_argument('-n', '--num_runs', default=3, type=int, help='Number of runs for each experimental setup')
     parser.add_argument('-d', '--dataset', type=str, help='Which dataset to run on?', default='PACS')
     parser.add_argument('-m', '--method', type=str, help='Which method to run?', default='CuMix')
     parser.add_argument('--trainer', type=str, default='/ibex/scratch/yik/MLCE/DZSL/dzsl.py')
@@ -23,6 +23,25 @@ def read_args() -> argparse.Namespace:
 
 
 def main(args):
+    # Ablations on extrapolations and interpolations
+    trainer = f'{args.roo_dir}/train_extp_abs.py'
+    EXTP = [0, 1, 2, 3, 4]
+    SPLITMODES = ['easy', 'hard']
+    for r in range(1, args.num_runs + 1):
+        for splitmode in SPLITMODES:
+            for extp in EXTP:
+                job_name = f'grawd_abs_cub_{splitmode}_extp{extp}_r{r}'
+                out_name = f'grawd_abs_cub_{splitmode}_extp{extp}_r{r}.out'
+                err_name = f'grawd_abs_cub_{splitmode}_extp{extp}_r{r}.err'
+
+                slurm_script = f'{args.root_dir}/scripts/slurm.sh'
+                cli_args = f' --dataset {dataset} --preprocessing --z_dim {z_dim} --runs {r}'
+
+                command = f'sbatch -J {job_name} -o {out_name} -e {err_name} ' \
+                          f'--export=ALL,cli_args="{trainer} {cli_args}" {slurm_script}'
+                os.system(command)
+
+
     # Training and evaluating attribute-based datasets
     if not args.text_dataset:
         DATASETS = ['APY', 'AWA1', 'AWA1', 'SUN', 'CUB']
