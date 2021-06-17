@@ -14,7 +14,7 @@ echo "`gpustat`"
 echo "`nvidia-smi`"
 echo "CLI args: $cli_args"
 
-run the application:
+#run the application:
 cd /ibex/scratch/yik/rwzsl/
 
 python -u $cli_args

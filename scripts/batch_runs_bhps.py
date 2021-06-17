@@ -29,19 +29,19 @@ def main(args):
     CUB_HARD_BEST_CONFIG = './configs/CUB_hard_Best_HPs.yml'
     CONFIGS = {'easy': CUB_EASY_BEST_CONFIG,
                'hard': CUB_HARD_BEST_CONFIG}
-    DATASETS = ['easy', 'hard']
+    SPLITMODE = ['easy', 'hard']
 
     trainer = '/ibex/scratch/yik/rwzsl/train_extp.py'
     i = 0
     for r in range(1, args.num_runs+1):
         for extp in EXTPS:
-            for dataset in DATASETS:
-                job_name = f'grawd_cub_{dataset}_r{r}_extp{extp}_{i}'
-                out_name = f'grawd_cub_{dataset}_r{r}_extp{extp}_{i}.out'
-                err_name = f'grawd_cub_{dataset}_r{r}_extp{extp}_{i}.err'
+            for splitmode in SPLITMODE:
+                job_name = f'grawd_cub_{splitmode}_r{r}_extp{extp}_{i}'
+                out_name = f'grawd_cub_{splitmode}_r{r}_extp{extp}_{i}.out'
+                err_name = f'grawd_cub_{splitmode}_r{r}_extp{extp}_{i}.err'
 
                 slurm_script = f'{args.root_dir}/scripts/slurm.sh'
-                cli_args = f' --dataset CUB --splitmode {splitmode} --exp_name {job_name} --rw_config_path {CONFIGS[dataset]} --extp {extp}'
+                cli_args = f' --dataset CUB --splitmode {splitmode} --exp_name {job_name} --rw_config_path {CONFIGS[splitmode]} --extp {extp}'
 
                 command = f'sbatch -J {job_name} -o {out_name} -e {err_name} ' \
                           f'--export=ALL,cli_args="{trainer} {cli_args}" {slurm_script}'
@@ -53,14 +53,14 @@ def main(args):
     trainer = '/ibex/scratch/yik/rwzsl/train_gamma_abs.py'
     for r in range(1, args.num_runs+1):
         for config in CONFIG_NO:
-            for dataset in DATASETS:
-                job_name = f'grawd_cub_{dataset}_r{r}_exp_decay{config}_{i}'
-                out_name = f'grawd_cub_{dataset}_r{r}_exp_decay{config}_{i}.out'
-                err_name = f'grawd_cub_{dataset}_r{r}_exp_decay{config}_{i}.err'
+            for splitmode in SPLITMODE:
+                job_name = f'grawd_cub_{splitmode}_r{r}_exp_decay{config}_{i}'
+                out_name = f'grawd_cub_{splitmode}_r{r}_exp_decay{config}_{i}.out'
+                err_name = f'grawd_cub_{splitmode}_r{r}_exp_decay{config}_{i}.err'
 
                 slurm_script = f'{args.root_dir}/scripts/slurm.sh'
 
-                config_path = f'./configs/CUB_{dataset}_Best_HPs_{CONFIG_NO}.yml'
+                config_path = f'./configs/CUB_{splitmode}_Best_HPs_{CONFIG_NO}.yml'
 
                 cli_args = f' --dataset CUB --splitmode {splitmode} --exp_name {job_name} --rw_config_path {config_path}'
 
