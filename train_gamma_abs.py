@@ -150,7 +150,8 @@ def train(is_val=True):
     netG.apply(weights_init)
     netD.apply(weights_init)
 
-    exp_params = f'RWZSL_{rw_config.compute_hash()}'
+    # exp_params = f'RWZSL_{rw_config.compute_hash()}'
+    exp_params = opt.exp_name
 
     out_subdir = main_dir + 'out/{:s}/{:s}'.format(exp_info, exp_params)
     if not os.path.exists(out_subdir):

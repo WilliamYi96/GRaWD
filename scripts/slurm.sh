@@ -1,13 +1,17 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #SBATCH -N 1
 #SBATCH --partition=batch
-#SBATCH --mail-user=imaginative.walks@gmail.com
-#SBATCH --mail-type=END
-#SBATCH --time=2:00:00
+#SBATCH -J Rep_Best_hps_2
+#SBATCH -o Rep_Best_hps_2.%J.out
+#SBATCH -e Rep_Best_hps_2.%J.err
+#SBATCH --time=24:00:00
 #SBATCH --mem=16G
 #SBATCH --gres=gpu:1
-#SBATCH --constraint=[v100]
+#SBATCH --constraint=[gtx1080ti|rtx2080ti|v100]
 
+#run the application:
+# shellcheck disable=SC2164
+cd /ibex/scratch/yik/rwzsl
 
 # Checking that our GPU is not taken
 echo "`gpustat`"

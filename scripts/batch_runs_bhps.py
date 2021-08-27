@@ -60,7 +60,7 @@ def main(args):
 
                 slurm_script = f'{args.root_dir}/scripts/slurm.sh'
 
-                config_path = f'./configs/CUB_{splitmode}_Best_HPs_{CONFIG_NO}.yml'
+                config_path = f'./configs/CUB_{splitmode}_Best_HPs_{config}.yml'
 
                 cli_args = f' --dataset CUB --splitmode {splitmode} --exp_name {job_name} --rw_config_path {config_path}'
 

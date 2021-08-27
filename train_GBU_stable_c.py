@@ -20,7 +20,7 @@ from dataset_GBU import FeatDataLayer, DATA_LOADER
 from models import _netD, _netG_att, _param
 from losses.gan_losses import compute_gradient_penalty, compute_centroid_loss
 from losses.prototype_loss import compute_prototype_loss
-from losses.rw_loss import compute_rw_real_loss, compute_rw_imitative_loss, compute_rw_creative_loss
+from losses.rw_loss_stable_center import compute_rw_real_loss, compute_rw_imitative_loss, compute_rw_creative_loss
 from losses.ausuc import compute_ausuc
 
 parser = argparse.ArgumentParser()
