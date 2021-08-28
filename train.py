@@ -54,8 +54,8 @@ from losses.rw_loss import compute_rw_real_loss, compute_rw_imitative_loss, comp
 from losses.ausuc import compute_ausuc
 
 rw_config = Config.load(opt.rw_config_path, frozen=False)
-# rw_config_cli = Config.read_from_cli(config_arg_prefix='--rw_config.')
-# rw_config = rw_config.overwrite(rw_config_cli)
+rw_config_cli = Config.read_from_cli(config_arg_prefix='--rw_config.')
+rw_config = rw_config.overwrite(rw_config_cli)
 rw_config.freeze()
 # print(rw_config.rw_params.n_examples_per_proto)
 # assert 0
@@ -344,14 +344,8 @@ def train(is_val=True):
                 f'  G_loss: {G_loss.data.item():.4};' \
                 f'  D_loss_real: {D_loss_real.data.item():.4};' \
                 f'  D_loss_fake: {D_loss_fake.data.item():.4};' \
-                f'  G_rw_imitative_walker_loss: {gen_rw_imitative_walker_loss:.4};' \
-                f'  G_rw_imitative_visit_loss: {gen_rw_imitative_visit_loss:.4};' \
                 f'  G_rw_creative_walker_loss: {gen_rw_creative_walker_loss:.4};' \
                 f'  G_rw_creative_visit_loss: {gen_rw_creative_visit_loss:.4};' \
-                f'  D_rw_imitative_walker_loss: {discr_rw_imitative_walker_loss:.4};' \
-                f'  D_rw_imitative_visit_loss: {discr_rw_imitative_visit_loss:.4};' \
-                f'  D_rw_real_walker_loss: {discr_rw_real_walker_loss:.4};' \
-                f'  D_rw_real_visit_loss: {discr_rw_real_visit_loss:.4};' \
                 f'  rl: {acc_real * 100:.4}%;' \
                 f'  fk: {acc_fake * 100:.4}%'
             print(log_text)

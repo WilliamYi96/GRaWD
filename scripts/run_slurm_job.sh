@@ -4,7 +4,9 @@
 #SBATCH --time=12:00:00
 #SBATCH --mem=16G
 #SBATCH --gres=gpu:1
-#SBATCH --constraint=[gtx1080ti|rtx2080ti|v100]
+#SBATCH --constraint=[rtx2080ti|v100]
+#SBATCH --mail-user=imaginative.walks@gmail.com
+#SBATCH --mail-type=END
 
 # Checking that our GPU is not taken
 echo "`gpustat`"
