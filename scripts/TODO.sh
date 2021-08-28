@@ -1,19 +1,19 @@
 ## TODOs
-python scripts/run_hpo.py -e nab_hard_big_hpo -d CUB -s hard
-python scripts/run_hpo.py -e nab_hard_big_hpo -d CUB -s easy
-python scripts/run_hpo.py -e nab_hard_big_hpo -d NAB -s hard
-python scripts/run_hpo.py -e nab_hard_big_hpo -d NAB -s easy
-
-python scripts/run_hpo.py -e nab_hard_big_hpo -d AWA2 --is_gbu
-python scripts/run_hpo.py -e nab_hard_big_hpo -d APY --is_gbu
-python scripts/run_hpo.py -e nab_hard_big_hpo -d SUN --is_gbu
+#python scripts/run_hpo.py -e nab_hard_big_hpo -d CUB -s hard
+#python scripts/run_hpo.py -e nab_hard_big_hpo -d CUB -s easy
+#python scripts/run_hpo.py -e nab_hard_big_hpo -d NAB -s hard
+#python scripts/run_hpo.py -e nab_hard_big_hpo -d NAB -s easy
+#
+#python scripts/run_hpo.py -e nab_hard_big_hpo -d AWA2 --is_gbu
+#python scripts/run_hpo.py -e nab_hard_big_hpo -d APY --is_gbu
+#python scripts/run_hpo.py -e nab_hard_big_hpo -d SUN --is_gbu
 
 ######################
 
-python scripts/run_hpo.py -e nab_hard_big_hpo -d CUB -s hard --setting 'sc'
-python scripts/run_hpo.py -e nab_hard_big_hpo -d CUB -s easy --setting 'sc'
-python scripts/run_hpo.py -e nab_hard_big_hpo -d NAB -s hard --setting 'sc'
-python scripts/run_hpo.py -e nab_hard_big_hpo -d NAB -s easy --setting 'sc'
+#python scripts/run_hpo.py -e nab_hard_big_hpo -d CUB -s hard --setting 'sc'
+#python scripts/run_hpo.py -e nab_hard_big_hpo -d CUB -s easy --setting 'sc'
+#python scripts/run_hpo.py -e nab_hard_big_hpo -d NAB -s hard --setting 'sc'
+#python scripts/run_hpo.py -e nab_hard_big_hpo -d NAB -s easy --setting 'sc'
 
 python scripts/run_hpo.py -e nab_hard_big_hpo -d AWA2 --is_gbu --setting 'sc'
 python scripts/run_hpo.py -e nab_hard_big_hpo -d APY --is_gbu --setting 'sc'
@@ -21,7 +21,16 @@ python scripts/run_hpo.py -e nab_hard_big_hpo -d SUN --is_gbu --setting 'sc'
 
 
 
+######################
 
+python scripts/run_hpo.py -e nab_hard_big_hpo -d CUB -s hard --setting 'ld'
+python scripts/run_hpo.py -e nab_hard_big_hpo -d CUB -s easy --setting 'ld'
+python scripts/run_hpo.py -e nab_hard_big_hpo -d NAB -s hard --setting 'ld'
+python scripts/run_hpo.py -e nab_hard_big_hpo -d NAB -s easy --setting 'ld'
+
+python scripts/run_hpo.py -e nab_hard_big_hpo -d AWA2 --is_gbu --setting 'ld'
+python scripts/run_hpo.py -e nab_hard_big_hpo -d APY --is_gbu --setting 'ld'
+python scripts/run_hpo.py -e nab_hard_big_hpo -d SUN --is_gbu --setting 'ld'
 
 
 

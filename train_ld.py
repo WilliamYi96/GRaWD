@@ -40,6 +40,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import normalize
 import scipy.integrate as integrate
 import matplotlib
+
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
@@ -49,15 +50,18 @@ from dataset import FeatDataLayer, LoadDataset, LoadDataset_NAB
 from models import _netD, _netG, _param
 from losses.gan_losses import compute_gradient_penalty, compute_centroid_loss
 from losses.prototype_loss import compute_prototype_loss
-from losses.rw_loss_stable_center import compute_rw_real_loss, compute_rw_imitative_loss, compute_rw_creative_loss
+from losses.rw_loss_low_dimension import compute_rw_real_loss, compute_rw_imitative_loss, compute_rw_creative_loss
 from losses.ausuc import compute_ausuc
 
 rw_config = Config.load(opt.rw_config_path, frozen=False)
 rw_config_cli = Config.read_from_cli(config_arg_prefix='--rw_config.')
 rw_config = rw_config.overwrite(rw_config_cli)
 rw_config.freeze()
+# print(rw_config.rw_params.n_examples_per_proto)
+# assert 0
 print('<=========== Random Walk config ===========>')
 print(rw_config)
+# assert 0
 
 """ hyper-parameter for training """
 opt.GP_LAMBDA = 10  # Gradient penalty lambda
@@ -85,6 +89,7 @@ torch.cuda.manual_seed_all(opt.manualSeed)
 # torch.backends.cudnn.benchmark = False
 
 main_dir = opt.main_dir
+
 
 class ListModule(nn.Module):
     def __init__(self, *args):
@@ -232,14 +237,20 @@ def train(is_val=True):
             grad_penalty.backward()
 
             # # Imitative fake RW loss for Discriminator
-            # discr_rw_imitative_walker_loss, discr_rw_imitative_visit_loss = compute_rw_imitative_loss(rw_config, data_layer, dataset, netD, netG)
-            # discr_rw_imitative_loss = discr_rw_imitative_walker_loss + rw_config.loss_weights.get('visit_loss', 1.0) * discr_rw_imitative_visit_loss
+            # discr_rw_imitative_walker_loss, discr_rw_imitative_visit_loss = compute_rw_imitative_loss(rw_config,
+            #                                                                                           data_layer,
+            #                                                                                           dataset, netD,
+            #                                                                                           netG)
+            # discr_rw_imitative_loss = discr_rw_imitative_walker_loss + rw_config.loss_weights.get('visit_loss',
+            #                                                                                       1.0) * discr_rw_imitative_visit_loss
             # discr_rw_imitative_loss = rw_config.loss_weights.discr.imitative * discr_rw_imitative_loss
             # discr_rw_imitative_loss.backward()
             #
             # # Imitative real RW loss for Discriminator
-            # discr_rw_real_walker_loss, discr_rw_real_visit_loss = compute_rw_real_loss(rw_config, data_layer, dataset, netD, netG)
-            # discr_rw_real_loss = discr_rw_real_walker_loss + rw_config.loss_weights.get('visit_loss', 1.0) * discr_rw_real_visit_loss
+            # discr_rw_real_walker_loss, discr_rw_real_visit_loss = compute_rw_real_loss(rw_config, data_layer, dataset,
+            #                                                                            netD, netG)
+            # discr_rw_real_loss = discr_rw_real_walker_loss + rw_config.loss_weights.get('visit_loss',
+            #                                                                             1.0) * discr_rw_real_visit_loss
             # discr_rw_real_loss = rw_config.loss_weights.discr.real * discr_rw_real_loss
             # discr_rw_real_loss.backward()
 
@@ -291,20 +302,25 @@ def train(is_val=True):
             G_fake_C = F.softmax(C_creative_fake, dim=1)
 
             # # Imitative RW loss for Generator
-            # gen_rw_imitative_walker_loss, gen_rw_imitative_visit_loss = compute_rw_imitative_loss(rw_config, data_layer, dataset, netD, netG)
-            # gen_rw_imitative_loss = gen_rw_imitative_walker_loss + rw_config.loss_weights.get('visit_loss', 1.0) * gen_rw_imitative_visit_loss
+            # gen_rw_imitative_walker_loss, gen_rw_imitative_visit_loss = compute_rw_imitative_loss(rw_config, data_layer,
+            #                                                                                       dataset, netD, netG)
+            # gen_rw_imitative_loss = gen_rw_imitative_walker_loss + rw_config.loss_weights.get('visit_loss',
+            #                                                                                   1.0) * gen_rw_imitative_visit_loss
             # gen_rw_imitative_loss = rw_config.loss_weights.gen.imitative * gen_rw_imitative_loss
 
             # Creative RW loss for Generator
-            gen_rw_creative_walker_loss, gen_rw_creative_visit_loss = compute_rw_creative_loss(rw_config, data_layer, dataset, netD, G_creative_sample, netG)
-            gen_rw_creative_loss = gen_rw_creative_walker_loss + rw_config.loss_weights.get('visit_loss', 1.0) * gen_rw_creative_visit_loss
+            gen_rw_creative_walker_loss, gen_rw_creative_visit_loss = compute_rw_creative_loss(rw_config, data_layer,
+                                                                                               dataset, netD,
+                                                                                               G_creative_sample, netG)
+            gen_rw_creative_loss = gen_rw_creative_walker_loss + rw_config.loss_weights.get('visit_loss',
+                                                                                            1.0) * gen_rw_creative_visit_loss
             gen_rw_creative_loss = rw_config.loss_weights.gen.creative * gen_rw_creative_loss
 
             total_gen_loss = GC_loss \
-                + centroid_loss \
-                + reg_loss \
-                + reg_Wz_loss \
-                + gen_rw_creative_loss
+                             + centroid_loss \
+                             + reg_loss \
+                             + reg_Wz_loss \
+                             + gen_rw_creative_loss
 
             reset_grad(nets)
             total_gen_loss.backward()
@@ -314,8 +330,10 @@ def train(is_val=True):
             reset_grad(nets)
 
         if it % opt.disp_interval == 0 and it:
-            acc_real = (np.argmax(C_real.data.cpu().numpy(), axis=1) == y_true.data.cpu().numpy()).sum() / float(y_true.data.size()[0])
-            acc_fake = (np.argmax(C_fake.data.cpu().numpy(), axis=1) == y_true.data.cpu().numpy()).sum() / float(y_true.data.size()[0])
+            acc_real = (np.argmax(C_real.data.cpu().numpy(), axis=1) == y_true.data.cpu().numpy()).sum() / float(
+                y_true.data.size()[0])
+            acc_fake = (np.argmax(C_fake.data.cpu().numpy(), axis=1) == y_true.data.cpu().numpy()).sum() / float(
+                y_true.data.size()[0])
 
             log_text = \
                 f'Iter-{it};' \
@@ -383,7 +401,8 @@ def eval_fakefeat_GZSL(netG, dataset, param, plot_dir, result):
         G_sample = netG(z, text_feat)
         gen_feat = np.vstack((gen_feat, G_sample.data.cpu().numpy()))
 
-    visual_pivots = [gen_feat[i * opt.nSample:(i + 1) * opt.nSample].mean(0) for i in range(dataset.train_cls_num + dataset.test_cls_num)]
+    visual_pivots = [gen_feat[i * opt.nSample:(i + 1) * opt.nSample].mean(0) for i in
+                     range(dataset.train_cls_num + dataset.test_cls_num)]
     visual_pivots = np.vstack(visual_pivots)
     """collect points for gzsl curve"""
 

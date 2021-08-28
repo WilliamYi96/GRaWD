@@ -5,7 +5,7 @@ from firelab.config import Config
 
 rdc_text_dim = 1000
 z_dim = 100
-h_dim = 4086
+h_dim = 4096
 
 
 class _param:

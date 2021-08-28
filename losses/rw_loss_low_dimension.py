@@ -33,18 +33,22 @@ def compute_random_walk_loss(
     else:
         raise NotImplementedError(f"Unknown RW space: {config.space}")
 
-    protos = compute_class_centroids(points_for_protos, proto_img_labels, config.n_examples_per_proto)  # (40, 4086)
-    point_to_proto_probs, proto_to_point_probs, point_to_point_probs = compute_transition_probs(
-        points, protos, config.similarity_measure, config.dot_product_scale)
+    protos = compute_class_centroids(points_for_protos, proto_img_labels, config.n_examples_per_proto)
+    # print(protos.shape, points.shape)  # (40， 4086), (1024, 4086)
+    k, interval = 10, int(protos.shape[0] / 10)
+    walker_loss, visit_loss = 0, 0
+    for i in range(k):
+        cur_protos = protos[interval * i : interval * (i+1)]
+        point_to_proto_probs, proto_to_point_probs, point_to_point_probs = compute_transition_probs(
+            points, cur_protos, config.similarity_measure, config.dot_product_scale)
 
-    print(point_to_proto_probs.shape, proto_to_point_probs.shape, point_to_point_probs.shape)
-    # torch.Size([1024, 40]) torch.Size([40, 1024]) torch.Size([1024, 1024])
-    # assert 0
+        cur_walker_loss = compute_walker_loss(
+            config, point_to_proto_probs, proto_to_point_probs,
+            point_to_point_probs, target_dist=target_dist, step_weights=step_weights)
+        cur_visit_loss = compute_visit_loss(proto_to_point_probs)
 
-    walker_loss = compute_walker_loss(
-        config, point_to_proto_probs, proto_to_point_probs,
-        point_to_point_probs, target_dist=target_dist, step_weights=step_weights)
-    visit_loss = compute_visit_loss(proto_to_point_probs)
+        walker_loss += cur_walker_loss
+        visit_loss += cur_visit_loss
 
     return walker_loss, visit_loss
 
