@@ -69,3 +69,5 @@ class _netG_att(nn.Module):
         input = torch.cat([z, c], 1)
         output = self.main(input)
         return output
+
+
